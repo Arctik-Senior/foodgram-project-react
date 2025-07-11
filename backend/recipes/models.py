@@ -144,7 +144,7 @@ class Favourite(models.Model):
 
 
 class ShoppingCart(models.Model):
-    """ Модель Корзина покупок """
+    """ Модель Корзина покупок. """
 
     user = models.ForeignKey(
         User,
