@@ -90,22 +90,20 @@ jobs:
             sudo rm -f .env
             sudo touch .env
             sudo chmod 666 .env
+            
+            echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" | sudo tee -a .env
+            echo "DB_ENGINE=${{ secrets.DB_ENGINE }}" | sudo tee -a .env
+            echo "DB_NAME=${{ secrets.POSTGRES_DB }}" | sudo tee -a .env
+            echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" | sudo tee -a .env
+            echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" | sudo tee -a .env
+            echo "DB_HOST=${{ secrets.DB_HOST }}" | sudo tee -a .env
+            echo "DB_PORT=${{ secrets.DB_PORT }}" | sudo tee -a .env
 
-            sudo echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
-            sudo echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
-            sudo echo DB_NAME=${{ secrets.POSTGRES_DB }} >> .env
-            sudo echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
-            sudo echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
-            sudo echo DB_HOST=${{ secrets.DB_HOST }} >> .env
-            sudo echo DB_PORT=${{ secrets.DB_PORT }} >> .env
-
-            sudo docker compose stop
-
-            sudo docker compose rm backend
+            sudo docker compose stop || true
+            sudo docker compose rm -f backend || true
             sudo docker compose pull backend
-            sudo docker compose rm frontend
+            sudo docker compose rm -f frontend || true
             sudo docker compose pull frontend
-
             sudo docker compose up -d --build
 
   send_message:
